@@ -6,3 +6,4 @@ edition = "2018"
 
 [dependencies]
 piston = "*"
+pistoncore-glutin_window = "0.54.0"
