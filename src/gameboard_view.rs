@@ -2,6 +2,7 @@
 
 use graphics::types::Color;
 use graphics::{Context,Graphics};
+use graphics::character::CharacterCache;
 
 use crate::gameboard_controller::GameboardController;
 
@@ -29,6 +30,8 @@ pub struct GameboardViewSettings{
     pub cell_edge_radius: f64,
     /// Selected cell background color.
     pub selected_cell_background_color : Color,
+    /// Text color
+    pub text_color : Color,
 }
 
 impl GameboardViewSettings{
@@ -46,6 +49,7 @@ impl GameboardViewSettings{
             section_edge_radius: 2.0,
             cell_edge_radius: 1.0,
             selected_cell_background_color : [0.9,0.9,1.0,1.0],
+            text_color : [0.0,0.0,0.1,1.0],
         }
     }
 }
@@ -65,8 +69,16 @@ impl GameboardView{
     }
 
     /// Draw gameboard.
-    pub fn draw<G:Graphics>(&self, controller: &GameboardController, c:&Context, g:&mut G){
-        use graphics::{Line,Rectangle};
+    pub fn draw<G:Graphics,C>(
+        &self,
+        controller: &GameboardController,
+        glyphs: &mut C,
+        c:&Context,
+        g:&mut G
+    )
+        where C : CharacterCache<Texture=G::Texture>
+    {
+        use graphics::{Line,Rectangle,Image,Transformed};
 
         let ref settings = self.settings;
         let board_rect = [
@@ -93,6 +105,29 @@ impl GameboardView{
                 .draw(cell_rect,&c.draw_state,c.transform,g);
         }
 
+        // Draw characters.
+        let text_image = Image::new_color(settings.text_color);
+        let cell_size = settings.size / 9.0;
+        for j in 0..9{
+            for i in 0..9{
+                if let Some(ch) = controller.gameboard.char([i,j]){
+                    let pos = [
+                        settings.position[0] + i as f64 * cell_size + 15.0,
+                        settings.position[1] + j as f64 * cell_size + 34.0,
+                    ];
+                    if let Ok(character) = glyphs.character(34,ch){
+                        let ch_x = pos[0] + character.left();
+                        let ch_y = pos[1] - character.top();
+                        text_image.draw(
+                            character.texture,
+                            &c.draw_state,
+                            c.transform.trans(ch_x,ch_y),
+                            g
+                        );
+                    }
+                }
+            }
+        }
         // Draw borders
         let cell_edge = Line::new(settings.cell_edge_color,settings.cell_edge_radius);
         let section_edge = Line::new(settings.section_edge_color, settings.section_edge_radius);
