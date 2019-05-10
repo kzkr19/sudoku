@@ -59,6 +59,8 @@ impl GameboardController{
                     Key::D7 => self.gameboard.set(ind,7),
                     Key::D8 => self.gameboard.set(ind,8),
                     Key::D9 => self.gameboard.set(ind,9),
+                    Key::Backspace => self.gameboard.set(ind,0),
+                    Key::Delete => self.gameboard.set(ind,0),
                     _ => {},
                 }
             }
