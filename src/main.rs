@@ -15,10 +15,12 @@ use opengl_graphics::{OpenGL,GlGraphics,Filter,GlyphCache,TextureSettings};
 pub use crate::gameboard::Gameboard;
 pub use crate::gameboard_controller::GameboardController;
 pub use crate::gameboard_view::{GameboardView,GameboardViewSettings};
+pub use crate::solver::Solver;
 
 mod gameboard;
 mod gameboard_controller;
 mod gameboard_view;
+mod solver;
 
 fn main() {
     let opengl = OpenGL::V3_2;

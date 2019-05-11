@@ -93,7 +93,7 @@ impl GameboardView{
         // Draw selected cell background
         if let Some(ind) = controller.selected_cell{
             let cell_size = settings.size / 9.0;
-            let pos = [ind[0] as f64 * cell_size, ind[1] as f64 * cell_size];
+            let pos = [ind.1 as f64 * cell_size, ind.0 as f64 * cell_size];
             let cell_rect = [
                 settings.position[0] + pos[0],
                 settings.position[1] + pos[1],
@@ -110,7 +110,7 @@ impl GameboardView{
         let cell_size = settings.size / 9.0;
         for j in 0..9{
             for i in 0..9{
-                if let Some(ch) = controller.gameboard.char([i,j]){
+                if let Some(ch) = controller.gameboard.char((j,i)){
                     let pos = [
                         settings.position[0] + i as f64 * cell_size + 15.0,
                         settings.position[1] + j as f64 * cell_size + 34.0,

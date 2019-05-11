@@ -8,7 +8,7 @@ pub struct GameboardController{
     /// Stores the gameboard state.
     pub gameboard : Gameboard,
     /// Selected cell.
-    pub selected_cell: Option<[usize;2]>,
+    pub selected_cell: Option<(usize,usize)>,
     /// Stores last mouse cursor position
     cursor_pos : [f64;2],
 }
@@ -41,7 +41,7 @@ impl GameboardController{
                 // Compute the cell position
                 let cell_x = (x / board_size * 9.0) as usize;
                 let cell_y = (y / board_size * 9.0) as usize;
-                self.selected_cell = Some([cell_x,cell_y]);
+                self.selected_cell = Some((cell_y,cell_x));
             }
         }
 
