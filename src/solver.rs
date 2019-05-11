@@ -4,8 +4,6 @@ use rand::prelude::*;
 
 /// Sudoku solver
 pub struct Solver{
-    /// random number generator
-    rng : ThreadRng,
 }
 
 use crate::gameboard::{SIZE,Gameboard};
@@ -14,7 +12,6 @@ impl Solver{
     /// Create new Solver
     pub fn new()->Solver{
         Solver{
-            rng : rand::thread_rng(),
         }
     }
 
@@ -43,7 +40,7 @@ impl Solver{
         }else{
             // brute force method
             let mut vec = (1..SIZE+1).collect::<Vec<usize>>();
-            vec.shuffle(&mut self.rng);
+            vec.shuffle(&mut rand::thread_rng());
 
             for d in vec{
                 if n_answer <= answers.len(){

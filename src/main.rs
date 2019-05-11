@@ -17,11 +17,13 @@ pub use crate::gameboard::Gameboard;
 pub use crate::gameboard_controller::GameboardController;
 pub use crate::gameboard_view::{GameboardView,GameboardViewSettings};
 pub use crate::solver::Solver;
+pub use crate::generator::Generator;
 
 mod gameboard;
 mod gameboard_controller;
 mod gameboard_view;
 mod solver;
+mod generator;
 
 fn main() {
     let opengl = OpenGL::V3_2;
@@ -34,7 +36,8 @@ fn main() {
     let mut events = Events::new(EventSettings::new().lazy(true));
     let mut gl = GlGraphics::new(opengl);
 
-    let gameboard = Gameboard::new();
+    let mut gameboard = Gameboard::new();
+    gameboard.generate();
     let mut gameboard_controller = GameboardController::new(gameboard);
     let gameboard_view_settings = GameboardViewSettings::new();
     let gameboard_view = GameboardView::new(gameboard_view_settings);

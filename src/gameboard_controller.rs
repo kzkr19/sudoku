@@ -62,7 +62,7 @@ impl GameboardController{
                     Key::Backspace => self.gameboard.set(ind,0),
                     Key::Delete => self.gameboard.set(ind,0),
                     Key::S=> self.gameboard.solve(),
-                    Key::Space => self.gameboard.solve(),
+                    Key::G=> self.gameboard.generate(),
                     _ => {},
                 }
             }

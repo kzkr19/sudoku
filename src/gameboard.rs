@@ -1,4 +1,5 @@
 use crate::solver::Solver;
+use crate::generator::Generator;
 
 /// Size of game board.
 pub const SIZE : usize = 9;
@@ -83,6 +84,25 @@ impl Gameboard{
         }
     }
 
+    /// if board has only one answer then true
+    pub fn unique(&mut self)->bool{
+        let mut solver = Solver::new();
+        let answers = solver.make_answer_list(self,2);
+
+        answers.len() == 1
+    }
+
+    /// Set 0 into all cells
+    pub fn reset(&mut self){
+        self.cells = [[0;SIZE];SIZE];
+    }
+
+    /// Generate new Sudoku quiz
+    pub fn generate(&mut self){
+        let mut generator = Generator::new();
+
+        generator.generate(self);
+    }
     /// Search invalid area
     fn search_invalid_position(&self) -> [[bool;SIZE]; SIZE]{
         let mut invalid1 = self.search_invalid_position_section();
