@@ -75,7 +75,8 @@ impl Gameboard{
 
     /// Solve and fill answer.
     pub fn solve(&mut self){
-        let answers = Solver::make_answer_list(self,1);
+        let mut solver = Solver::new();
+        let answers = solver.make_answer_list(self,1);
 
         if answers.len() > 0{
             self.cells = answers[0];
