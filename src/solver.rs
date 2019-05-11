@@ -14,7 +14,7 @@ impl Solver{
     /// Create new Solver
     pub fn new()->Solver{
         Solver{
-            rng : rand::thread_rng()
+            rng : rand::thread_rng(),
         }
     }
 
@@ -35,10 +35,13 @@ impl Solver{
         }
 
         if position == SIZE * SIZE{
+            // valid and finished
             answers.push(gb.copy_cells());
         }else if gb.get((i,j))!= 0{
+            // already filled value
             self.solve_core(gb, n_answer,position+1,answers);
         }else{
+            // brute force method
             let mut vec = (1..SIZE+1).collect::<Vec<usize>>();
             vec.shuffle(&mut self.rng);
 
