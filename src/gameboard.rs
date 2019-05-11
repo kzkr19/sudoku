@@ -52,6 +52,11 @@ impl Gameboard{
         self.cells.clone()
     }
 
+    /// get invalid value
+    pub fn get_invalid(&self,ind:(usize,usize))->bool{
+        self.invalid_pos[ind.0][ind.1]
+    }
+
     /// Check whether valid or invalid
     pub fn invalid(&self)->bool{
         (0..SIZE*SIZE)

@@ -32,6 +32,8 @@ pub struct GameboardViewSettings{
     pub selected_cell_background_color : Color,
     /// Text color
     pub text_color : Color,
+    /// Invalid cell background color.
+    pub invalid_cell_background_color : Color,
 }
 
 impl GameboardViewSettings{
@@ -50,6 +52,7 @@ impl GameboardViewSettings{
             cell_edge_radius: 1.0,
             selected_cell_background_color : [0.9,0.9,1.0,1.0],
             text_color : [0.0,0.0,0.1,1.0],
+            invalid_cell_background_color : [0.5,0.0,0.0,0.5],
         }
     }
 }
@@ -105,16 +108,23 @@ impl GameboardView{
                 .draw(cell_rect,&c.draw_state,c.transform,g);
         }
 
-        // Draw characters.
+        let invalid_cell_rect = Rectangle::new(settings.invalid_cell_background_color);
         let text_image = Image::new_color(settings.text_color);
         let cell_size = settings.size / 9.0;
         for j in 0..9{
             for i in 0..9{
+                let x_pos = settings.position[0] + i as f64 * cell_size;
+                let y_pos = settings.position[1] + j as f64 * cell_size;
+
+                // Draw invalid cell background
+                if controller.gameboard.get_invalid((j,i)){
+                    let cell_rect = [x_pos,y_pos,cell_size,cell_size];
+                    invalid_cell_rect.draw(cell_rect,&c.draw_state,c.transform,g);
+                }
+
+                // Draw characters.
                 if let Some(ch) = controller.gameboard.char((j,i)){
-                    let pos = [
-                        settings.position[0] + i as f64 * cell_size + 15.0,
-                        settings.position[1] + j as f64 * cell_size + 34.0,
-                    ];
+                    let pos = [ x_pos + 15.0 , y_pos + 34.0 ];
                     if let Ok(character) = glyphs.character(34,ch){
                         let ch_x = pos[0] + character.left();
                         let ch_y = pos[1] - character.top();
