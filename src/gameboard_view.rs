@@ -34,6 +34,8 @@ pub struct GameboardViewSettings{
     pub text_color : Color,
     /// Invalid cell background color.
     pub invalid_cell_background_color : Color,
+    /// Readonly cell background color.
+    pub readonly_cell_background_color : Color,
 }
 
 impl GameboardViewSettings{
@@ -53,6 +55,7 @@ impl GameboardViewSettings{
             selected_cell_background_color : [0.9,0.9,1.0,1.0],
             text_color : [0.0,0.0,0.1,1.0],
             invalid_cell_background_color : [0.5,0.0,0.0,0.5],
+            readonly_cell_background_color : [0.25,0.25,0.25,0.5],
         }
     }
 }
@@ -109,21 +112,31 @@ impl GameboardView{
         }
 
         let invalid_cell_rect = Rectangle::new(settings.invalid_cell_background_color);
+        let readonly_cell_rect = Rectangle::new(settings.readonly_cell_background_color);
         let text_image = Image::new_color(settings.text_color);
         let cell_size = settings.size / 9.0;
         for j in 0..9{
             for i in 0..9{
+                let ind = (j,i);
                 let x_pos = settings.position[0] + i as f64 * cell_size;
                 let y_pos = settings.position[1] + j as f64 * cell_size;
+                let invalid = controller.gameboard.get_invalid(ind); 
+                let readonly = controller.gameboard.get_readonly(ind); 
 
                 // Draw invalid cell background
-                if controller.gameboard.get_invalid((j,i)){
+                if readonly == false && invalid {
                     let cell_rect = [x_pos,y_pos,cell_size,cell_size];
                     invalid_cell_rect.draw(cell_rect,&c.draw_state,c.transform,g);
                 }
 
+                // Draw readonly cell background
+                if readonly{
+                    let cell_rect = [x_pos,y_pos,cell_size,cell_size];
+                    readonly_cell_rect.draw(cell_rect,&c.draw_state,c.transform,g);
+                }
+
                 // Draw characters.
-                if let Some(ch) = controller.gameboard.char((j,i)){
+                if let Some(ch) = controller.gameboard.char(ind){
                     let pos = [ x_pos + 15.0 , y_pos + 34.0 ];
                     if let Ok(character) = glyphs.character(34,ch){
                         let ch_x = pos[0] + character.left();

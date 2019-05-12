@@ -18,6 +18,7 @@ impl Generator{
        gb.solve();
 
        self.make_hole(gb,SIZE*SIZE*9/16);
+       self.set_readonly(gb);
     }
 
     /// Delete several cells
@@ -44,6 +45,16 @@ impl Generator{
 
             if cnt == n_max_hole{
                 break;
+            }
+        }
+    }
+
+    /// set readonly value to gameboard
+    fn set_readonly(&self,gb:&mut Gameboard){
+        for i in 0..SIZE{
+            for j in 0..SIZE{
+                let f = gb.get((i,j)) != 0;
+                gb.set_readonly((i,j),f);
             }
         }
     }

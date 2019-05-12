@@ -58,6 +58,16 @@ impl Gameboard{
         self.invalid_pos[ind.0][ind.1]
     }
 
+    /// get readonly value
+    pub fn get_readonly(&self,ind:(usize,usize))->bool{
+        self.readonly[ind.0][ind.1]
+    }
+
+    /// set readonly value
+    pub fn set_readonly(&mut self,ind:(usize,usize),val:bool){
+        self.readonly[ind.0][ind.1] = val;
+    }
+
     /// Check whether valid or invalid
     pub fn invalid(&self)->bool{
         (0..SIZE*SIZE)
@@ -95,6 +105,8 @@ impl Gameboard{
     /// Set 0 into all cells
     pub fn reset(&mut self){
         self.cells = [[0;SIZE];SIZE];
+        self.readonly = [[false;SIZE];SIZE];
+        self.invalid_pos = [[false;SIZE];SIZE];
     }
 
     /// Generate new Sudoku quiz
